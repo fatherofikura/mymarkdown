@@ -26,7 +26,11 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: yarn install
+      - run: npm install
+
+      - run:
+          name: 'Install Dependecies'
+          command: npm install --save-dev firebase-tools
 
       - save_cache:
           paths:
@@ -34,4 +38,8 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
-      - run: yarn test
+      - run: npm run build
+
+      - run:
+          name: 'Deploy to Hosting'
+          command: firebase deploy --project "$FIREBASE_PJ" --token "$FIREBASE_TOKEN"
